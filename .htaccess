@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# API routes - allow PHP to handle backend
+RewriteRule ^backend/ - [L]
+
+# Serve React build
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /backend/router.php [L]
