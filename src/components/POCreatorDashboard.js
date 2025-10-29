@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Select from '../components/common/Select';
-import Input from '../components/common/Input';
+import Select from './common/Select';
+import Input from './common/Input';
 
 const POCreatorDashboard = ({ user, onLogout }) => {
   const [clients, setClients] = useState([]);
@@ -20,8 +20,8 @@ const POCreatorDashboard = ({ user, onLogout }) => {
   useEffect(()=>{
     // load parts
     api('/backend/api/parts.php?action=list').then(d=>{ if(d.success){ setParts(d.parts.map(p=>({ value:p.id, label:`${p.part_number} - ${p.part_name}` })) ); }});
-    // load clients (simple query via PO list as placeholder)
-    api('/backend/api/purchase_orders.php').then(()=>{});
+    // load clients
+    api('/backend/api/clients.php').then(d=>{ if(d.success){ setClients(d.clients.map(c=>({ value:c.id, label:`${c.company_name} (${c.client_code})` })) ); }});
   },[]);
 
   const addItem = () => setItems([...items,{ part_id:'', quantity:0, unit_price:0 }]);
@@ -50,7 +50,7 @@ const POCreatorDashboard = ({ user, onLogout }) => {
         <div className="form-row">
           <Input label="PO Date" type="date" value={poDate} onChange={setPoDate} required />
           <Input label="Delivery Date" type="date" value={deliveryDate} onChange={setDeliveryDate} />
-          <Input label="Client ID" value={clientId} onChange={setClientId} placeholder="Temporary - will switch to dropdown" required />
+          <Select label="Client" value={clientId} onChange={setClientId} options={clients} required />
         </div>
         <div className="form-group">
           <label>Notes</label>
