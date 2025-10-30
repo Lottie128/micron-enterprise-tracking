@@ -14,7 +14,8 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      const response = await fetch('/backend/api/auth.php', {
+      // Try root level auth.php first
+      const response = await fetch('/auth.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +35,8 @@ const Login = ({ onLogin }) => {
         setError(data.message || 'Login failed');
       }
     } catch (error) {
-      setError('Network error. Please try again.');
+      console.error('Login error:', error);
+      setError('Network error. Please check if server is running.');
     }
     setLoading(false);
   };
@@ -85,6 +87,7 @@ const Login = ({ onLogin }) => {
         
         <div className="login-footer">
           <p>Default Login: admin / admin123</p>
+          <p>Debug: Check /debug.php to test server</p>
         </div>
       </div>
     </div>
